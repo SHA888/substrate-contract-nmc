@@ -1,7 +1,7 @@
 use contracts_node_runtime::{
 	AccountId, BalancesConfig, GenesisConfig, Signature, SudoConfig, SystemConfig, WASM_BINARY,
 };
-use sc_service::ChainType;
+use sc_service::{ChainType, Properties};
 use sp_core::{sr25519, Pair, Public};
 use sp_runtime::traits::{IdentifyAccount, Verify};
 
@@ -26,6 +26,14 @@ where
 	AccountPublic: From<<TPublic::Pair as Pair>::Public>,
 {
 	AccountPublic::from(get_from_seed::<TPublic>(seed)).into_account()
+}
+
+pub fn properties() -> Properties {
+	let mut p = Properties::new();
+	p.insert("ss58format".into(), 42.into());
+	p.insert("tokenDecimals".into(), 18.into());
+	p.insert("tokenSymbol".into(), "NMC".into());
+	p
 }
 
 pub fn development_config() -> Result<ChainSpec, String> {
@@ -69,7 +77,7 @@ pub fn development_config() -> Result<ChainSpec, String> {
 		// Fork ID
 		None,
 		// Properties
-		None,
+		Some(properties()),
 		// Extensions
 		None,
 	))
@@ -116,7 +124,7 @@ pub fn local_testnet_config() -> Result<ChainSpec, String> {
 		// Fork ID
 		None,
 		// Properties
-		None,
+		Some(properties()),
 		// Extensions
 		None,
 	))
