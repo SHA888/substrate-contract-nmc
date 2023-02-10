@@ -47,6 +47,13 @@ pallet-transaction-payment-rpc-runtime-api = { git = "https://github.com/parityt
 pallet-contracts = { git = "https://github.com/paritytech/substrate", package = "pallet-contracts", default-features = false, branch = "polkadot-v0.9.37" }
 pallet-contracts-primitives = { git = "https://github.com/paritytech/substrate", package = "pallet-contracts-primitives", default-features = false, branch = "polkadot-v0.9.37" }
 
+# EVM specific packages
+pallet-evm = { git = 'https://github.com/paritytech/frontier.git', default-features = false }
+pallet-evm-precompile-modexp ={ git = 'https://github.com/paritytech/frontier.git', default-features = false }
+pallet-evm-precompile-sha3fips ={ git = 'https://github.com/paritytech/frontier.git', default-features = false }
+pallet-evm-precompile-simple ={ git = 'https://github.com/paritytech/frontier.git', default-features = false }
+pallet-ethereum = { git = 'https://github.com/paritytech/frontier.git', default-features = false }
+
 # Chain extension
 pallet-assets-chain-extension = { git = "https://github.com/727-Ventures/pallet-assets-chain-extension", default-features = false, features = ["substrate"], branch = "polkadot-v0.9.37"  }
 
@@ -66,6 +73,8 @@ std = [
 	"frame-system/std",
 	"pallet-authorship/std",
 	"pallet-balances/std",
+	'pallet-evm/std',
+	'pallet-ethereum/std',
 	"pallet-randomness-collective-flip/std",
 	"pallet-sudo/std",
 	"pallet-timestamp/std",

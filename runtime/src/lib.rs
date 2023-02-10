@@ -43,6 +43,16 @@ pub use frame_system::Call as SystemCall;
 pub use pallet_balances::Call as BalancesCall;
 pub use pallet_timestamp::Call as TimestampCall;
 use pallet_transaction_payment::CurrencyAdapter;
+
+// Import pallets for EVM compatibility
+use pallet_evm::{
+    Account as EVMAccount, FeeCalculator, EnsureAddressTruncated, HashedAddressMapping, runner::stack::Runner as RunnerT
+};
+use pallet_evm::Runner;
+
+mod precompiles;
+use precompiles::FrontierPrecompiles;
+
 #[cfg(any(feature = "std", test))]
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
@@ -365,6 +375,27 @@ impl pallet_contracts::Config for Runtime {
 	type MaxStorageKeyLen = ConstU32<128>;
 	type MaxDebugBufferLen = ConstU32<{ 2 * 1024 * 1024 }>;
 	type UnsafeUnstableInterface = ConstBool<true>;
+}
+
+// Configure pallets for EVM compatibility
+
+parameter_types! {
+    pub const ChainId: u64 = 1337;
+}
+
+impl pallet_evm::Config for Runtime {
+    type FeeCalculator = ();
+    type GasWeightMapping = ();
+    type BlockGasLimit = ();
+    type Runner = RunnerT<Self>;
+    type OnChargeTransaction = ();
+    type CallOrigin = EnsureAddressTruncated;
+    type WithdrawOrigin = EnsureAddressTruncated;
+    type AddressMapping = HashedAddressMapping<BlakeTwo256>;
+    type Currency = Balances;
+    type RuntimeEvent = RuntimeEvent;
+    type Precompiles = ();
+    type ChainId = ChainId;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
